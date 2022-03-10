@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TenantProperty extends Model
+{
+    use HasFactory;
+    protected $table = "tbltenant_properties";
+    protected $primaryKey = "transid";
+    const CREATED_AT = 'createdate';
+    const UPDATED_AT = 'modifydate';
+
+    protected $fillable = [
+        'transid',
+        'tenant_id',
+        'property_id',
+        'status',
+        'createdate',
+        'createuser',
+        'modifyuser',
+        'modifydate',
+        'deleted',
+    ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(User::class, 'tenant_id', 'userid');
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Properties::class, 'property_id', 'transid');
+    }
+}

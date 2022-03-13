@@ -191,10 +191,10 @@
                         text: data.msg,
                         icon: "success"
                     });
-                    $("#add-modal").modal('hide');
+                    // $("#add-modal").modal('hide');
                     propertiesTable.ajax.reload(false, null);
-                    addPropertyForm.reset();
-                    $("select").val(null).trigger('change');
+                    // addPropertyForm.reset();
+                    // $("select").val(null).trigger('change');
 
                 }).catch(function (err) {
                     if (err) {

@@ -1,6 +1,6 @@
 @section('head')
 <meta charset="utf-8" />
-<title>Real Home &middot; @yield('page-name')</title>
+<title>Pay Dailly &middot; @yield('page-name')</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="shortcut icon" href="{{ asset('assets/landing/favicon.png') }}" />

@@ -2,14 +2,16 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <x-landing.head />
 @php
+$class='';
 if (Route::currentRouteName()==='welcome')  $body =  'homepage-9 hp-6 homepage-1';
 elseif(Route::currentRouteName()==='properties-details') $body = 'inner-pages sin-1 homepage-4 hd-white';
 elseif(Route::currentRouteName()==='about') $body = 'inner-pages hd-white about';
 elseif(Route::currentRouteName()==='contact') $body = 'inner-pages hd-white';
+elseif(Route::currentRouteName()==='bookings') {$class="int_main_wraapper"; $body = 'maxw1600 m0a dashboard-bd';}
 else $body = 'inner-pages homepage-4 agents hp-6 full hd-white';
 @endphp
 <body class="{{ $body }}">
-    <div id="wrapper">
+    <div id="wrapper" class="{{$class}}">
         <x-landing.header />
         <div class="clearfix"></div>
         @yield('page-content')

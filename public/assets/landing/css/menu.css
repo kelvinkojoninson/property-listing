@@ -512,6 +512,11 @@ a.button.border, a.button {
     background-color: #FF385C;
     color: #FF385C;
 }
+
+#navigation.style-1 ul li.active a {
+    color: #fff;
+}
+
 #navigation.style-1 ul li:hover a {
     color: #fff;
 }

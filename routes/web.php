@@ -38,6 +38,7 @@ Route::get('/portfolio-gallery/{buildingType}', [RouteController::class, 'portfo
 Route::get('/portfolio/{propertyID}', [RouteController::class, 'portfolioDetails'])->name('portfolio-details');
 Route::get('/contact', [RouteController::class, 'contact'])->name('contact');
 Route::get('/about', [RouteController::class, 'about'])->name('about');
+Route::get('/bookings', [RouteController::class, 'bookings'])->name('bookings');
 Route::get('/portfolio-grid/{buildingType}/{location}/{contractType}', [RouteController::class, 'propertyGrid'])->name('properties-grid');
 
 // Route::post('/send_message', [EnquiryController::class, 'sendMessage'])->name('send-message');

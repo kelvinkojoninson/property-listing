@@ -33,8 +33,18 @@ class Bookings extends Model
         return $this->belongsTo(User::class, 'createuser', 'userid');
     }
 
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class, 'createuser', 'userid');
+    }
+
+    public function approved()
+    {
+        return $this->belongsTo(User::class, 'modifyuser', 'userid');
+    }
+
     public function property()
     {
-        return $this->belongsTo(Property::class, 'property_id', 'transid');
+        return $this->belongsTo(Properties::class, 'property_id', 'transid');
     }
 }

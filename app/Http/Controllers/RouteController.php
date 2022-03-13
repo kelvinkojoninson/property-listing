@@ -14,6 +14,8 @@ use App\Models\OwnerAgents;
 use App\Models\Properties;
 use App\Models\States;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -92,8 +94,7 @@ class RouteController extends Controller
             ->get();
 
         $this->states = States::where('deleted', 0)
-            ->where('country_id', 83)
-            ->inRandomOrder()
+            ->orderBy('name', 'asc')
             ->get();
     }
 
@@ -145,8 +146,12 @@ class RouteController extends Controller
 
     public function payments()
     {
+        $users = User::where('deleted', 0)->where('role', 'tenant')->get();
+        $properties = Properties::where('deleted', 0)->get();
+
         return view("admin.payments.index", [
-            // "permissions" => $this->permissions('customers'),
+            "users" => $users,
+            "properties" => $properties,
         ]);
     }
 
@@ -241,12 +246,12 @@ class RouteController extends Controller
             ->inRandomOrder()
             ->limit(3)
             ->get();
-        if(Auth::user()){      
+        if (Auth::user()) {
             $checkIfBooked = Bookings::where('userid', Auth::user()->userid)
-            ->where('status', 1)
-            ->where('property_id', $property->transid)
-            ->where('deleted', 0)
-            ->first();
+                ->where('status', 1)
+                ->where('property_id', $property->transid)
+                ->where('deleted', 0)
+                ->first();
         }
 
         return view("property-detail", [
@@ -394,6 +399,13 @@ class RouteController extends Controller
     public function myRents()
     {
         $tenants = User::where('deleted', 0)->where('role', 'tenant')->get();
+        Wallet::firstOrCreate([
+            'userid' => Auth::user()->userid,
+        ], [
+            'wallet_id' => "WA" . strtoupper(bin2hex(random_bytes(5))),
+            'userid' => Auth::user()->userid,
+        ]);
+        $balance = WalletHistory::where('userid', Auth::user()->userid)->sum('amount');
 
         $properties = Properties::where('deleted', 0)
             ->where('ownership_status', 0)->get();
@@ -401,6 +413,7 @@ class RouteController extends Controller
         return view("admin.rents.index", [
             "tenants" => $tenants,
             "properties" => $properties,
+            "balance" => $balance,
         ]);
     }
 

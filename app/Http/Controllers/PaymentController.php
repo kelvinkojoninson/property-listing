@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PaymentResource;
+use App\Models\PaymentLog;
 use App\Models\Payments;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,39 @@ class PaymentController extends Controller
     public function index()
     {
         $data = Payments::where('deleted', 0)->get();
+
+        return response()->json([
+            'ok' => true,
+            'msg' => 'Request successful',
+            'data' => PaymentResource::collection($data)
+        ]);
+    }
+
+    public function payments($userid, $property, $dateFrom, $dateTo)
+    {
+        $data = Payments::when($userid !== 'all', function ($q)  use ($userid) {
+            return $q->where('userid', $userid);
+        })->when($property !== 'all', function ($q)  use ($property) {
+            return $q->where('property_id', $property);
+        })->whereBetween('createdate', [$dateFrom." 00:00:00", $dateTo." 23:59:59"])
+        ->where('deleted', 0)
+        ->orderByDesc('createdate')->get();
+
+        return response()->json([
+            'ok' => true,
+            'msg' => 'Request successful',
+            'data' => PaymentResource::collection($data)
+        ]);
+    }
+
+    public function logs($userid, $property, $dateFrom, $dateTo)
+    {
+        $data = PaymentLog::when($userid !== 'all', function ($q)  use ($userid) {
+            return $q->where('userid', $userid);
+        })->when($property !== 'all', function ($q)  use ($property) {
+            return $q->where('property_id', $property);
+        })->whereBetween('payment_date', [$dateFrom, $dateTo])
+        ->orderByDesc('payment_date')->get();
 
         return response()->json([
             'ok' => true,

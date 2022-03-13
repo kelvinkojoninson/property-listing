@@ -39,6 +39,10 @@ Route::prefix("building_types")->group(function () {
 Route::resource("building_types", BuildingTypeController::class);
 
 // PAYMENT ROUTE
+Route::prefix("payments")->group(function () {
+    Route::get("{userid}/{property}/{dateFrom}/{dateTo}", [PaymentController::class, "payments"]);
+    Route::get("logs/{userid}/{property}/{dateFrom}/{dateTo}", [PaymentController::class, "logs"]);
+});
 Route::resource("payments", PaymentController::class);
 
 // PROPERTIES ROUTE
@@ -96,7 +100,9 @@ Route::resource("enquiries", EnquiryController::class);
 
 // BOOKINGS ROUTE
 Route::prefix("booking")->group(function () {
-
+    Route::get("{userid}/{property}/{dateFrom}/{dateTo}", [BookingsController::class, "bookings"]);
+    Route::post("update", [BookingsController::class, "update"]);
+    Route::post("delete", [BookingsController::class, "deleteBooking"]);
 });
 Route::resource("booking", BookingsController::class);
 
@@ -104,7 +110,7 @@ Route::resource("booking", BookingsController::class);
 Route::prefix("tenants")->group(function () {
     Route::post("assign_property", [TenantController::class, "assignProperty"]);
     Route::post("update_assign_property", [TenantController::class, "updateAssignProperty"]);
-    Route::get("properties/{userid}", [TenantController::class, "properties"]);
+    Route::get("properties/{userid}/{property}", [TenantController::class, "properties"]);
     Route::post("delete_tenant_property", [TenantController::class, "deleteTenantProperty"]);
 });
 Route::resource("tenants", TenantController::class);

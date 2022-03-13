@@ -25,6 +25,10 @@ class TenantProperty extends Model
         'deleted',
     ];
 
+    protected $appends = [
+        'payment'
+    ];
+
     public function tenant()
     {
         return $this->belongsTo(User::class, 'tenant_id', 'userid');
@@ -34,4 +38,11 @@ class TenantProperty extends Model
     {
         return $this->belongsTo(Properties::class, 'property_id', 'transid');
     }
+
+    public function getPaymentAttribute()
+    {
+        return $this->hasMany(Payments::class, 'wallet_id', 'wallet_id')->where('property_id','property_id')->where('tenant_id','userid')->sum('amount');
+
+    }
+
 }

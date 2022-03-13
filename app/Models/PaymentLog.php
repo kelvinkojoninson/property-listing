@@ -5,28 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payments extends Model
+class PaymentLog extends Model
 {
     use HasFactory;
-    protected $table = "tblpayments";
-    protected $primaryKey = "transid";
-    const CREATED_AT = 'createdate';
-    const UPDATED_AT = 'modifydate';
 
     protected $fillable = [
-        'transid',
+        'payment_id',
         'property_id',
         'userid',
         'amount_due',
-        'amount_paid',
-        'balance',
-        'payment_mode',
-        'reference',
-        'createdate',
-        'createuser',
-        'modifyuser',
-        'modifydate',
-        'deleted',
+        'payment_date',
+        'status',
+        'reference'
     ];
 
     public function user()

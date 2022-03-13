@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TenantPropertyResource;
 use App\Http\Resources\TenantResource;
+use App\Models\Bookings;
+use App\Models\Payments;
+use App\Models\Properties;
 use App\Models\Tenant;
 use App\Models\TenantProperty;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletHistory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,10 +36,12 @@ class TenantController extends Controller
         ]);
     }
 
-    public function properties($tenantID)
+    public function properties($tenantID, $property)
     {
         $data = TenantProperty::when($tenantID !== 'all', function ($q)  use ($tenantID) {
             return $q->where('tenant_id', $tenantID);
+        })->when($property !== 'all', function ($q)  use ($property) {
+            return $q->where('property_id', $property);
         })->where('deleted', 0)
         ->orderByDesc('createdate')->get();
 
@@ -70,12 +77,14 @@ class TenantController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'tenant' => 'required',
+                'userid' => 'required',
                 'property' => 'required',
                 'status' => 'required',
+                'dateOccupied' => 'required',
             ],
             [
-                "tenant.required" => "No tenant selected",
+                "userid.required" => "No user selected",
+                "dateOccupied.required" => "No date selected",
                 "property.required" => "No property selected",
                 "status.required" => "No status selected",
             ]
@@ -88,32 +97,72 @@ class TenantController extends Controller
             ]);
         }
 
-        $propertyCheck = TenantProperty::where('property_id', $request->property)->where('deleted', 0)->where('status', 0)->first();
-        if($propertyCheck){
-            if ($validator->fails()) {
+        // Check balance
+        $property =  Properties::select('price')->where("transid", $request->property)->first();
+        $balance = WalletHistory::where('userid', $request->userid)->sum('amount');
+         if ($balance < ($property->price * 7)) {
                 return response()->json([
                     "ok" => false,
-                    "msg" => "This property is aleady occuped!!"
+                    "msg" => "Wallet balance is low. Tenant must top up wallet to at least a weeks rent or sale amount. Minimum balance required is !".($property->price * 7)
                 ]);
             } 
-        }
 
-        $tenant = TenantProperty::where('tenant_id', $request->tenant)->where('property_id', $request->property)->where('deleted', 0)->first();
+        $tenant = TenantProperty::where('tenant_id', $request->userid)
+        ->where('property_id', $request->property)
+        ->where('status', 0)
+        ->where('deleted', 0)->first();
+
         if($tenant){
-            if ($validator->fails()) {
                 return response()->json([
                     "ok" => false,
                     "msg" => "This property has been already been assigned to this tenant!"
                 ]);
-            } 
         }
 
         try {
-            $transResult = DB::transaction(function () use ($request) {
+            $transResult = DB::transaction(function () use ($request, $property) {
                 TenantProperty::insert([
-                    'tenant_id' => $request->tenant,
+                    'tenant_id' => $request->userid,
                     'property_id' => $request->property,
+                    'date_occupied' => $request->dateOccupied,
                     'status' => $request->status,
+                    "createdate" =>  date("Y-m-d H:i:s"),
+                    "createuser" =>  $request->createuser
+                ]);
+
+                Bookings::where('booking_code', $request->bookingCode)
+                ->where('userid', $request->userid)->where('deleted', 0)->update([
+                    'is_approved' => 0,
+                ]);
+
+                $wallet = Wallet::firstOrCreate([
+                    'userid' => $request->userid,
+                ], [
+                    'wallet_id' => "WA" . strtoupper(bin2hex(random_bytes(5))),
+                    'userid' => $request->userid,
+                ]);
+
+                WalletHistory::create([
+                    "transid" => "TR" . strtoupper(bin2hex(random_bytes(5))),
+                    "userid" => $request->userid,
+                    "wallet_id" => $wallet->wallet_id,
+                    "amount" => -$property->price,
+                    "currency" => "GHS",
+                    "reference" => json_encode($request->bookingCode),
+                    "transtype" => "credit",
+                    "channel" => 'wallet',
+                    "ifo" => "Property ID: $request->property",
+                ]);
+
+                Payments::insert([
+                    "transid" => strtoupper(bin2hex(random_bytes(5))),
+                    "property_id" => $request->property,
+                    "userid" => $request->userid,
+                    "amount_due" => $property->price,
+                    "amount_paid" => $property->price,
+                    "balance" => 0,
+                    "payment_mode" => 'WALLET',
+                    "reference" =>  date("Y-m-d"),
                     "createdate" =>  date("Y-m-d H:i:s"),
                     "createuser" =>  $request->createuser
                 ]);

@@ -14,7 +14,8 @@ class CreatePaymentsTable extends Migration
     public function up()
     {
         Schema::create('tblpayments', function (Blueprint $table) {
-            $table->increments('transid')->primaryKey();
+            $table->string('transid')->primaryKey();
+            $table->string('property_id');
             $table->string('userid');
             $table->decimal('amount_due', 10, 2);
             $table->decimal('amount_paid');

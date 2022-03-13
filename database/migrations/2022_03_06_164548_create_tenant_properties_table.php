@@ -17,6 +17,8 @@ class CreateTenantPropertiesTable extends Migration
             $table->increments('transid')->primaryKey();
             $table->string('tenant_id');
             $table->string('property_id');
+            $table->timestamp('date_occupied')->nullable();
+            $table->timestamp('date_vacated')->nullable();
             $table->boolean('deleted')->default(0);
             $table->boolean('status')->default(0);
             $table->string('createuser');

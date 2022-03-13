@@ -15,17 +15,17 @@ class PaymentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "transid" => $this->transid,
+            "paymentID" => $this->transid ?? $this->payment_id,
+            "id" => $this->id,
             "userid" => $this->userid,
             "name" => "{$this->user->fname} {$this->user->mname} {$this->user->lname}",
-            "email" => $this->user->email,
-            "phone" => $this->user->phone,
+            "property" => $this->property->title,
             "amountDue" => number_format($this->amount_due, 2),
             "amountPaid" => number_format($this->amount_paid, 2),
-            "balance" => number_format($this->balance, 2),
             "paymentMode" => $this->payment_mode,
             "reference" => $this->reference,
-            "createdate" => strtoupper(date("j M, Y h:i:sa", strtotime($this->createdate))),
+            "status" => $this->status == 0 ? '<span class="label label-lg font-weight-bold  label-success label-inline">Successful</span>' : '<span class="label label-lg font-weight-bold  label-danger label-inline">Failed</span>',
+            "paymentDate" => strtoupper(date("j M, Y h:i:sa", strtotime($this->createdate))) ?? strtoupper(date("j M, Y h:i:sa", strtotime($this->payment_date))),
         ];
     }
 }

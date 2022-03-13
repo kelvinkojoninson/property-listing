@@ -1,115 +1,56 @@
-@extends('layouts.layouts')
-@section('page-name', 'Login')
-@section('page-content')
-    @php
-    use App\Models\BuildingTypes;
-    use App\Models\Properties;
-    use App\Models\States;
+<x-guest-layout>
+    <x-auth-card>
+        <x-slot name="logo">
+            <a href="/">
+                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+            </a>
+        </x-slot>
 
-    $buildingTypes = BuildingTypes::withCount('properties')
-        ->where('deleted', 0)
-        ->get();
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    //  $cities = Cities::where('deleted', 0)->get();
+        <!-- Validation Errors -->
+        <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-    $propertyTypes = Properties::where('deleted', 0)
-        ->whereIn('status', ['rent', 'sale'])
-        ->inRandomOrder()
-        ->limit(5)
-        ->get();
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-    $latest = Properties::where('deleted', 0)
-        ->whereIn('status', ['rent', 'sale'])
-        ->inRandomOrder()
-        ->orderByDesc('createdate')
-        ->limit(3)
-        ->get();
+            <!-- Email Address -->
+            <div>
+                <x-label for="email" :value="__('Email')" />
 
-    $portfolios = Properties::where('deleted', 0)
-        ->inRandomOrder()
-        ->limit(3)
-        ->get();
-
-    $states = States::where('deleted', 0)
-        ->where('country_id', 83)
-        ->inRandomOrder()
-        ->get();
-    @endphp
-    <div id="main">
-
-        <section class='fullwidth-background dark-bg'
-            style='background:url({{ asset('assets/landing/parallax-building.jpg') }}) center center repeat'>
-            <div class="fullwidth-background-wrapper">
-                <div class="container">
-                    <div class="main-title-section">
-                        <h1>Login</h1>
-                        <div class="breadcrumb">
-                            <a href="/">Home</a><span class='fa fa-angle-double-right'>
-                            </span><span class="current">@yield('page-name')</span>
-                        </div>
-                    </div>
-                </div>
+                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
-        </section>
 
+            <!-- Password -->
+            <div class="mt-4">
+                <x-label for="password" :value="__('Password')" />
 
-        <div class="container">
+                <x-input id="password" class="block mt-1 w-full"
+                                type="password"
+                                name="password"
+                                required autocomplete="current-password" />
+            </div>
 
-            <section id="primary" class="content-full-width">
+            <!-- Remember Me -->
+            <div class="block mt-4">
+                <label for="remember_me" class="inline-flex items-center">
+                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                </label>
+            </div>
 
-                <div class="column dt-sc-one-half first">
+            <div class="flex items-center justify-end mt-4">
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
 
-                    <h2 class="border-title alignleft"> <span>Login Form</span> </h2>
-
-                    <p> <strong>Already a Member? Log in here.</strong> </p>
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <p>
-                            <label>Username<span class="required"> * </span></label>
-                            <input type="text" id="email" name="email" class="input @error('email') is-invalid @enderror"
-                                value="{{ old('email') }}" size="20" tabindex="10" required="required" />
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors }}</strong>
-                                </span>
-                            @enderror
-                        </p>
-
-                        <p>
-                            <label>Password<span class="required"> * </span> </label>
-                            <input class="input @error('password') is-invalid @enderror" type="password" name="password"
-                                size="20" tabindex="20" required="required" />
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors }}</strong>
-                                </span>
-                            @enderror
-                        </p>
-
-                        <p class="forgetmenot">
-                            <label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" />
-                                Remember Me</label>
-                        </p>
-
-                        <p class="submit alignleft">
-                            <input type="submit" name="wp-submit" class="button-primary" value="Log In" tabindex="100" />
-                        </p>
-                    </form>
-
-                    @if (Route::has('password.request'))
-                        <p class="tpl-forget-pwd"><a href="{{ route('password.request') }}">Lost
-                                your password?</a></p>
-                    @endif
-                </div>
-
-
-                <div class="column dt-sc-one-half">
-                    <h2 class="border-title alignleft"> <span>Register Form</span> </h2>
-                    <p> <strong>Do not have an account? <a href="{{ route('register') }}">Register here</a></strong> </p>
-                </div>
-                <div class="clear"></div>
-
-            </section>
-        </div>
-    </div>
-@endsection
+                <x-button class="ml-3">
+                    {{ __('Log in') }}
+                </x-button>
+            </div>
+        </form>
+    </x-auth-card>
+</x-guest-layout>

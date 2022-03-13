@@ -71,21 +71,6 @@ class BuildingTypeController extends Controller
                     "createdate" =>  date("Y-m-d H:i:s"),
                     "createuser" =>  $request->createuser,
                 ]);
-
-                $userIp = $request->ip();
-                $locationData = Location::get($userIp);
-                $transid = strtoupper(bin2hex(random_bytes(4)));
-
-                Logs::insert([
-                    "userid" => $transid,
-                    "module" => "Building Types",
-                    "action" => "Building type added from Back Office with id {$insertID}",
-                    "ipaddress" => $userIp,
-                    "createuser" =>  $transid,
-                    "createdate" => date("Y-m-d H:i:s"),
-                    "longitude" => $locationData->longitude ?? $userIp,
-                    "latitude" => $locationData->latitude ?? $userIp,
-                ]);
             });
 
             if (!empty($transResult)) {
@@ -188,21 +173,6 @@ class BuildingTypeController extends Controller
                     "modifydate" =>  date("Y-m-d H:i:s"),
                     "modifyuser" =>  $request->createuser,
                 ]);
-
-                $userIp = $request->ip();
-                $locationData = Location::get($userIp);
-                $transid = strtoupper(bin2hex(random_bytes(4)));
-
-                Logs::insert([
-                    "userid" => $transid,
-                    "module" => "Building Type",
-                    "action" => "Building type updated from Back office - {$request->transid}",
-                    "ipaddress" => $userIp,
-                    "createuser" =>  $request->createuser,
-                    "createdate" => date("Y-m-d H:i:s"),
-                    "longitude" => $locationData->longitude ?? $userIp,
-                    "latitude" => $locationData->latitude ?? $userIp,
-                ]);
             });
 
             if (!empty($transResult)) {
@@ -246,21 +216,6 @@ class BuildingTypeController extends Controller
                 "msg" => "Delete failed",
             ]);
         }
-
-        $userIp = $request->ip();
-        $locationData = Location::get($userIp);
-        $transid = strtoupper(bin2hex(random_bytes(4)));
-
-        Logs::insert([
-            "userid" => $transid,
-            "module" => "Building Type",
-            "action" => "Deleted building type from Back office with id {$request->transid}",
-            "ipaddress" => $userIp,
-            "createuser" =>  $request->createuser,
-            "createdate" => date("Y-m-d H:i:s"),
-            "longitude" => $locationData->longitude ?? $userIp,
-            "latitude" => $locationData->latitude ?? $userIp,
-        ]);
 
         return response()->json([
             "ok" => true,

@@ -19,19 +19,43 @@ var KTTagifyDemos = function() {
             }, {
                 value : 'Video Security',
             },{
-                value : 'Roof Terrace',
-            },{
                 value : 'Water Storage',
             },{
                 value : 'Power Backup',
             },{
                 value : 'Air Conditioning',
             },{
-                value : 'Balcony',
-            },{
                 value : 'Cot',
             },{
                 value : 'Rain Water Harvesting',
+            },{
+                value : 'Swimming Pool',
+            },{
+                value : 'Central Heating',
+            },{
+                value : 'Laundry Room',
+            },{
+                value : 'Security',
+            },{
+                value : 'Window Covering',
+            },{
+                value : 'Roof Terrace',
+            },{
+                value : 'WiFi',
+            },{
+                value : 'TV Cable',
+            },{
+                value : 'Dryer',
+            },{
+                value : 'Microwave',
+            },{
+                value : 'Washer',
+            },{
+                value : 'Refrigerator',
+            },{
+                value : 'Outdoor Shower',
+            },{
+                value : 'Balcony',
             },{
                 value : 'Gym',
             }],

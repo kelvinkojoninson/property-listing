@@ -55,7 +55,7 @@
                                 class="form-control">
                         </div>
                     </div>
-                    @if (Auth::user()->userid !== 'tenant')
+                    @if (Auth::user()->role !== 'tenant')
                         <div class="row mt-2">
                             <div class="col">
                                 <label for="">Status<span style="color:red">*</span></label>

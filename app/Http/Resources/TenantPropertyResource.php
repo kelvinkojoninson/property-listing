@@ -28,7 +28,7 @@ class TenantPropertyResource extends JsonResource
             "createdate" => strtoupper(date("j M, Y", strtotime($this->createdate))),
             "dateOccupied" => strtoupper(date("j M, Y", strtotime($this->date_occupied))),
             "dateVacated" => empty($this->date_vacacted) ? '' : strtoupper(date("j M, Y", strtotime($this->date_vacacted))),
-            "cummulatedPrice" => number_format($this->balance, 2)
+            "cummulatedPrice" => number_format($this->payment, 2)
         ];
     }
 }

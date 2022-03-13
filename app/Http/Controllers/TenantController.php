@@ -103,7 +103,7 @@ class TenantController extends Controller
          if ($balance < $property->price) {
                 return response()->json([
                     "ok" => false,
-                    "msg" => "Wallet balance is low. Tenant must top up wallet to at least a weeks rent or sale amount. Minimum balance required is !".$property->price
+                    "msg" => "Wallet balance is low. Tenant must top up wallet to at least a weeks rent or sale amount. Minimum balance required is GHS ".$property->price
                 ]);
             } 
 

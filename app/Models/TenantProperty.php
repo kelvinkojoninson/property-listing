@@ -41,7 +41,7 @@ class TenantProperty extends Model
 
     public function getPaymentAttribute()
     {
-        return $this->hasMany(Payments::class, 'wallet_id', 'wallet_id')->where('property_id','property_id')->where('tenant_id','userid')->sum('amount');
+        return $this->hasMany(Payments::class, 'userid','tenant_id')->where('property_id',$this->property_id)->where('deleted',0)->sum('amount_paid');
 
     }
 

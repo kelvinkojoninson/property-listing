@@ -66,7 +66,7 @@ class RouteController extends Controller
             ->where('state', 7)
             ->inRandomOrder()
             ->limit(8)
-            ->groupBy('city', 'pictures')
+            ->groupBy('city')
             ->get();
 
         $this->contractTypes = Properties::where('deleted', 0)

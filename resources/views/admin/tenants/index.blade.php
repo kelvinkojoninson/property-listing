@@ -82,13 +82,23 @@
 
                     <div class="tab-pane" id="kt_apps_projects_view_tab_5" role="tabpanel">
                         <div class="row mb-2">
-                            <div class="col-4">
+                            <div class="col">
                                 <label for="">Tenant</label>
                                 <select id="tenant-id" class="form-control select2">
                                     <option value="all">All Tenants</option>
                                     @foreach ($tenants as $tenant)
                                         <option value="{{ $tenant->userid }}">{{ $tenant->userid }} &bullet;
                                             {{ $tenant->fname }} {{ $tenant->mname }} {{ $tenant->lname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="">Property</label>
+                                <select id="property-id" class="form-control select2">
+                                    <option value="all">All Properties</option>
+                                    @foreach ($properties as $property)
+                                        <option value="{{ $property->transid }}">{{ $property->transid }} &bullet;
+                                            {{ $property->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -211,11 +221,12 @@
         });
 
         var tenantID = document.getElementById('tenant-id').value;
+        var propertyID = document.getElementById('property-id').value;
 
         var propertyTenantTable = $('#property-tenants-table').DataTable({
             dom: "Bfrtip",
             ajax: {
-                url: `${APP_URL}/api/tenants/properties/${tenantID}`,
+                url: `${APP_URL}/api/tenants/properties/${tenantID}/${propertyID}`,
                 type: "GET"
 
             },
@@ -338,15 +349,6 @@
                     },
                     action: function(e, dt, node, config) {
                         dt.ajax.reload(false, null);
-                    }
-                },
-                {
-                    text: "Assign property to Tenant",
-                    attr: {
-                        class: "ml-2 btn-success btn btn-sm rounded"
-                    },
-                    action: function(e, dt, node, config) {
-                        $("#assign-property-modal").modal("show")
                     }
                 },
             ]

@@ -1,5 +1,5 @@
 @section('header')
-    <header id="header-container" class="header head-tr">
+    <header id="header-container" class="header head-tr bg-dark">
         <!-- Header -->
         <div id="header" class="head-tr bottom">
             <div class="container container-header">
@@ -49,15 +49,6 @@
                 <!-- Left Side Content / End -->
 
                 <!-- Right Side Content / End -->
-                <div class="right-side d-none d-none d-lg-none d-xl-flex">
-                    <div class="header-widget">
-                        <a href="add-property.html" class="button border">Add Listing<i
-                                class="fas fa-laptop-house ml-2"></i></a>
-                    </div>
-                </div>
-                <!-- Right Side Content / End -->
-
-                <!-- Right Side Content / End -->
                 @if (Auth::user())
                     <div class="header-user-menu user-menu add">
                         <div class="header-user-name">
@@ -66,10 +57,10 @@
                                     alt=""></span>Hi, {{ Auth::user()->fname }}!
                         </div>
                         <ul>
-                            <li><a href="user-profile.html"> Edit profile</a></li>
-                            <li><a href="{{ route('bookings') }}"> Bookings</a></li>
-                            <li><a href="payment-method.html"> Payments</a></li>
-                            <li><a href="change-password.html"> Change Password</a></li>
+                            <li><a href="#"> Edit profile</a></li>
+                            <li><a href="{{ route('dashboard') }}"> Bookings</a></li>
+                            <li><a href="{{ route('dashboard') }}"> Payments</a></li>
+                            <li><a href="#"> Change Password</a></li>
                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                 @csrf
                                 <li><a style="cursor:pointer"

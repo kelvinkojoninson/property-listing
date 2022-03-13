@@ -96,6 +96,7 @@ class RouteController extends Controller
         $this->states = States::where('deleted', 0)
             ->orderBy('name', 'asc')
             ->get();
+            
     }
 
     public function dashboard()
@@ -103,17 +104,27 @@ class RouteController extends Controller
         $target = "admin.dashboard.index";
         $tenants = '';
         $properties = '';
+        $balance = '';
 
         if (Auth::user()->role === 'tenant') {
             $target = "admin.rents.index";
             $tenants = User::where('deleted', 0)->where('role', 'tenant')->get();
             $properties = Properties::where('deleted', 0)->where('ownership_status', 0)->get();
+            Wallet::firstOrCreate([
+                'userid' => Auth::user()->userid,
+            ], [
+                'wallet_id' => "WA" . strtoupper(bin2hex(random_bytes(5))),
+                'userid' => Auth::user()->userid,
+            ]);
+            $balance = WalletHistory::where('userid', Auth::user()->userid)->sum('amount');
         }
 
         return view($target, [
             "tenants" => $tenants,
             "properties" => $properties,
+            "balance" => $balance,
         ]);
+        
     }
 
     public function applicants()

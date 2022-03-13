@@ -37,7 +37,6 @@
     @include('admin.properties.modals.view')
 
     <script>
-        let countries = @json($countries);
         let states = @json($states);
 
         let role = "{!! Auth::user()->role !!}";
@@ -224,9 +223,8 @@
             $("#update-longitude").val(data.longitude);
             $("#update-latitude").val(data.latitude);
             $("#update-schools-neighbourhood").val(data.schoolsNeighbourhood);
-            let statesDropdown = document.getElementById("update-states-dropdown");
+            $("#update-states-dropdown").val(data.state).trigger('change');
             let citiesDropdown = document.getElementById("update-cities-dropdown");
-            getStates(data.state, data.country, statesDropdown);
             getCities(data.city, data.state, citiesDropdown);
 
         });
@@ -310,34 +308,13 @@
         });
 
         let statesDropdown = document.getElementById("states-dropdown");
-        let countryDropdown = document.getElementById("country-dropdown");
         let citiesDropdown = document.getElementById("cities-dropdown");
-
-        countryDropdown.addEventListener("change", function(event) {
-            let selectedIndex = countryDropdown.options.selectedIndex;
-            let countryCode = countryDropdown.options[selectedIndex].value;
-            getStates(null, countryCode, statesDropdown);
-        });
 
         statesDropdown.addEventListener("change", function(event) {
             let selectedIndex = statesDropdown.options.selectedIndex;
             let stateCode = statesDropdown.options[selectedIndex].value;
             getCities(null, stateCode, citiesDropdown);
         });
-
-        function getStates(statecode, countrycode, stateDropdown) {
-            let selectedCountry = countries.find((country) => country.id == countrycode);
-            let fragment = new DocumentFragment();
-
-            selectedCountry.states.map(state => {
-                let selected = state.transid == statecode ? true : false;
-                let option = new Option(state.name, state.transid, selected, selected);
-                fragment.appendChild(option);
-            });
-
-            stateDropdown.innerHTML = null;
-            stateDropdown.appendChild(fragment);
-        }
 
         function getCities(citycode, statecode, cityDropdown) {
             let selectedState = states.find((state) => state.transid == statecode);

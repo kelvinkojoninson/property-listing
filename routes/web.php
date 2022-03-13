@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\RentController;
+use App\Models\States;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,5 +45,11 @@ Route::get('/portfolio-grid/{buildingType}/{location}/{contractType}', [RouteCon
 // Route::post('/send_message', [EnquiryController::class, 'sendMessage'])->name('send-message');
 
 Route::get("/payment/callback", [RentController::class, "handleGatewayCallback"])->name('payment');
+
+// Route::get('states', function(){
+// $states =  States::with('cities')->get();
+// return $states;
+// });
+
 
 require __DIR__.'/auth.php';

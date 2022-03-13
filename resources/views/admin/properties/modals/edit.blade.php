@@ -51,6 +51,9 @@
                             <label for="">State<span style="color:red">*</span></label>
                             <select name="state" id="update-states-dropdown" class="form-control" required>
                                 <option value="">Select State</option>
+                                @foreach ($states as $state)
+                                    <option value="{{ $state->transid }}">{{ $state->name }}</option>
+                                 @endforeach
                             </select>
                         </div>
                         <div class="col">

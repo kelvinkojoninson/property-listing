@@ -212,7 +212,7 @@ class BookingsController extends Controller
                     'occupants_no' => $request->occupants_no,
                     'status' => $request->status,
                     "modifydate" =>  $request->status == 0 ? date("Y-m-d H:i:s") : NULL,
-                    "modifyuser" =>  $request->status == 0 ? $request->userid : ''
+                    "modifyuser" =>  $request->status == 0 ? $request->createuser : ''
                 ]);
             });
 

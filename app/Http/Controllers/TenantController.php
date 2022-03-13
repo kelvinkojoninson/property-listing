@@ -100,10 +100,10 @@ class TenantController extends Controller
         // Check balance
         $property =  Properties::select('price')->where("transid", $request->property)->first();
         $balance = WalletHistory::where('userid', $request->userid)->sum('amount');
-         if ($balance < ($property->price * 7)) {
+         if ($balance < $property->price) {
                 return response()->json([
                     "ok" => false,
-                    "msg" => "Wallet balance is low. Tenant must top up wallet to at least a weeks rent or sale amount. Minimum balance required is !".($property->price * 7)
+                    "msg" => "Wallet balance is low. Tenant must top up wallet to at least a weeks rent or sale amount. Minimum balance required is !".$property->price
                 ]);
             } 
 

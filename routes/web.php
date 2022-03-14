@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\RentController;
+use App\Models\Properties;
 use App\Models\States;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +48,15 @@ Route::get('/portfolio-grid/{buildingType}/{location}/{contractType}', [RouteCon
 
 Route::get("/payment/callback", [RentController::class, "handleGatewayCallback"])->name('payment');
 
-// Route::get('states', function(){
-// $states =  States::with('cities')->get();
-// return $states;
-// });
+Route::get('test', function(){
+$props =  Properties::select('transid','title')->get();
+foreach ($props as $prop) {
+    Properties::where('transid', $prop->transid)->update([
+        'slug' => Str::slug($prop->title. ' ' . bin2hex(random_bytes(10))),
+    ]);
+}
+return true;
+});
 
 
 require __DIR__.'/auth.php';

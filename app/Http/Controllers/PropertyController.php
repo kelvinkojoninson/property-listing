@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
@@ -107,6 +108,7 @@ class PropertyController extends Controller
          
                 Properties::insert([
                     'transid' => $transid,
+                    'slug' => Str::slug($request->title. ' ' . bin2hex(random_bytes(10))),
                     'status' => $request->status,
                     'country' => $request->country,
                     'state' => $request->state,
@@ -296,6 +298,7 @@ class PropertyController extends Controller
                     'state' => $request->state,
                     'city' => $request->city,
                     'title' => $request->title,
+                    'slug' => Str::slug($request->title. ' ' . bin2hex(random_bytes(10))),
                     'description' => $request->description,
                     'address' => $request->address,
                     'building_type' => $request->buildingType,

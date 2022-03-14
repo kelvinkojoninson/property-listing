@@ -18,6 +18,7 @@ class CreatePropertiesTable extends Migration
             $table->string('status');
             $table->boolean('ownership_status')->default(0);
             $table->string('title');
+            $table->text('slug');
             $table->longText('description');
             $table->string('country', 20);
             $table->string('state', 20);

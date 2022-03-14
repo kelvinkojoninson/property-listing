@@ -1,9 +1,9 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/" title="Real Home">
-                <img class="normal_logo" src="{{ asset('assets/landing/logo.png') }}" alt="Real Home"
-                    title="Real Home" />
+            <a href="/" title="Pay Daily">
+                <img class="normal_logo" src=" {{ asset('logo-paydaily.png')}}" alt="Pay Daily">
+
             </a>
         </x-slot>
 
